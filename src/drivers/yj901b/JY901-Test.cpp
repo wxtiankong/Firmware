@@ -47,7 +47,7 @@ __global__ void bitreverse(void *data) {
  */
 int main(void) {
 	printf("JY901 test start!\n");
-	CJY901 sensor = CJY901(0, 0x50);
+	CJY901 sensor = CJY901(1, 0x50);
 	bool a = sensor.Open();
 	//printf("size of this is %i byte",sizeof());
 
