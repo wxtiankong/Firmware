@@ -69,7 +69,7 @@ int main(void) {
 		
 		sensor.GetGyro();//输出角速度
 		usleep(10);
-		sprintf(str,"角速度 :%.3f %.3f %.3f\r\n",
+		printf("角速度 :%.3f %.3f %.3f\r\n",
 			(float)sensor.stcGyro.w[0]/32768*2000,
 			(float)sensor.stcGyro.w[1]/32768*2000,
 			(float)sensor.stcGyro.w[2]/32768*2000);
@@ -77,16 +77,16 @@ int main(void) {
 		
 		sensor.GetMag();//输出磁场
 		usleep(10);
-		sprintf(str,"磁场:%d %d %d\r\n",sensor.stcMag.h[0],sensor.stcMag.h[1],sensor.stcMag.h[2]);
+		printf("磁场:%d %d %d\r\n",sensor.stcMag.h[0],sensor.stcMag.h[1],sensor.stcMag.h[2]);
 			 	
 		
 		sensor.GetPress();//输出气压、高度
 		usleep(10);
-		sprintf(str,"气压、高度:%ld Height%.2f\r\n",sensor.stcPress.lPressure,(float)sensor.stcPress.lAltitude/100);
+		printf("气压、高度:%ld Height%.2f\r\n",sensor.stcPress.lPressure,(float)sensor.stcPress.lAltitude/100);
 			  
 		sensor.GetDStatus();//输出端口状态
 		usleep(10);
-		sprintf(str,"端口状态:%d %d %d %d\r\n",
+		printf(str,"端口状态:%d %d %d %d\r\n",
 			sensor.stcDStatus.sDStatus[0],
 			sensor.stcDStatus.sDStatus[1],
 			sensor.stcDStatus.sDStatus[2],
@@ -94,12 +94,12 @@ int main(void) {
 		
 		sensor.GetLonLat();//输出经纬度
 		usleep(10);
-		sprintf(str,"经纬度 Longitude:%ldDeg%.5fm Lattitude:%ldDeg%.5fm\r\n",sensor.stcLonLat.lLon/10000000,(double)(sensor.stcLonLat.lLon % 10000000)/1e5,sensor.stcLonLat.lLat/10000000,(double)(sensor.stcLonLat.lLat % 10000000)/1e5);
+		printf("经纬度 Longitude:%ldDeg%.5fm Lattitude:%ldDeg%.5fm\r\n",sensor.stcLonLat.lLon/10000000,(double)(sensor.stcLonLat.lLon % 10000000)/1e5,sensor.stcLonLat.lLat/10000000,(double)(sensor.stcLonLat.lLat % 10000000)/1e5);
 			 
 		
 		sensor.GetGPSV();//输出地速 
 		usleep(10); 
-		sprintf(str,"地速 GPSHeight:%.1fm GPSYaw:%.1fDeg GPSV:%.3fkm/h\r\n",(float)sensor.stcGPSV.sGPSHeight/10,(float)sensor.stcGPSV.sGPSYaw/10,(float)sensor.stcGPSV.lGPSVelocity/1000);
+		printf("地速 GPSHeight:%.1fm GPSYaw:%.1fDeg GPSV:%.3fkm/h\r\n",(float)sensor.stcGPSV.sGPSHeight/10,(float)sensor.stcGPSV.sGPSYaw/10,(float)sensor.stcGPSV.lGPSVelocity/1000);
 			 
  		usleep(1000);
 	}
