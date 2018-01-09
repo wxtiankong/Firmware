@@ -86,7 +86,7 @@ int main(void) {
 			  
 		sensor.GetDStatus();//输出端口状态
 		usleep(10);
-		printf(str,"端口状态:%d %d %d %d\r\n",
+		printf("端口状态:%d %d %d %d\r\n",
 			sensor.stcDStatus.sDStatus[0],
 			sensor.stcDStatus.sDStatus[1],
 			sensor.stcDStatus.sDStatus[2],
