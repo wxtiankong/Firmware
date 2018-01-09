@@ -1,4 +1,4 @@
-/****************************************************************************
+************************
  *
  *   Copyright (c) 2013-2015 PX4 Development Team. All rights reserved.
  *
@@ -68,23 +68,77 @@
 #include <drivers/drv_range_finder.h>
 #include <drivers/device/ringbuffer.h>
 
-#include <uORB/uORB.h>
-#include <uORB/topics/subsystem_info.h>
-#include <uORB/topics/distance_sensor.h>
-
+#include <uORB/uORB.h> 
+#include <uORB/topics/sensor_combined.h>
 #include <board_config.h>
-
-/* Configuration Constants */ 
-#define YJ901B_BASEADDR 	0x50  
-#define YJ901B_DEVICE_PATH	"/dev/srf01"
+ 
  
 #ifndef CONFIG_SCHED_WORKQUEUE
 # error This requires CONFIG_SCHED_WORKQUEUE.
 #endif
   
-extern "C" __EXPORT int YJ901B_main(int argc, char *argv[]); 
-int
-YJ901B_main(int argc, char *argv[])
-{ 
-	
+extern "C" __EXPORT int yj901b_main(int argc, char *argv[]); 
+ 
+#include "JY-901B.hpp"
+ 
+int yj901b_main(void) { 
+	PX4_INFO("JY901 test start!\n");
+	CJY901 sensor = CJY901(1, 0x50);
+	bool a = sensor.Open(); 
+
+	sensor_combined data;
+	while (a) {
+		
+		sensor.GetAngle();
+		usleep(10);
+		printf("角度 x:%f, y:%f, z:%f---",
+				(float) sensor.stcAngle.Angle[0] / 32768 * 180,
+				(float) sensor.stcAngle.Angle[1] / 32768 * 180,
+				(float) sensor.stcAngle.Angle[2] / 32768 * 180);
+		orb_publish(ORB_ID(gps_dump), _dump_communication_pub, dump_data);
+
+		sensor.GetAcc();//输出加速度
+		usleep(10);
+		printf("加速度 x:%f, y:%f, z:%f---",
+				(float) sensor.stcAcc.a[0] / 32768 * 16,
+				(float) sensor.stcAcc.a[1] / 32768 * 16,
+				(float) sensor.stcAcc.a[2] / 32768 * 16);
+		
+		sensor.GetGyro();//输出角速度
+		usleep(10);
+		printf("角速度 :%.3f %.3f %.3f\r\n",
+			(float)sensor.stcGyro.w[0]/32768*2000,
+			(float)sensor.stcGyro.w[1]/32768*2000,
+			(float)sensor.stcGyro.w[2]/32768*2000);
+
+		
+		sensor.GetMag();//输出磁场
+		usleep(10);
+		printf("磁场:%d %d %d\r\n",sensor.stcMag.h[0],sensor.stcMag.h[1],sensor.stcMag.h[2]);
+			 	
+		
+		sensor.GetPress();//输出气压、高度
+		usleep(10);
+		printf("气压、高度:%ld Height%.2f\r\n",sensor.stcPress.lPressure,(float)sensor.stcPress.lAltitude/100);
+			  
+		sensor.GetDStatus();//输出端口状态
+		usleep(10);
+		printf("端口状态:%d %d %d %d\r\n",
+			sensor.stcDStatus.sDStatus[0],
+			sensor.stcDStatus.sDStatus[1],
+			sensor.stcDStatus.sDStatus[2],
+			sensor.stcDStatus.sDStatus[3]);
+		
+		sensor.GetLonLat();//输出经纬度
+		usleep(10);
+		printf("经纬度 Longitude:%ldDeg%.5fm Lattitude:%ldDeg%.5fm\r\n",sensor.stcLonLat.lLon/10000000,(double)(sensor.stcLonLat.lLon % 10000000)/1e5,sensor.stcLonLat.lLat/10000000,(double)(sensor.stcLonLat.lLat % 10000000)/1e5);
+			 
+		
+		sensor.GetGPSV();//输出地速 
+		usleep(10); 
+		printf("地速 GPSHeight:%.1fm GPSYaw:%.1fDeg GPSV:%.3fkm/h\r\n",(float)sensor.stcGPSV.sGPSHeight/10,(float)sensor.stcGPSV.sGPSYaw/10,(float)sensor.stcGPSV.lGPSVelocity/1000);
+			 
+ 		usleep(1000);
+	} 
+	return 0;
 }

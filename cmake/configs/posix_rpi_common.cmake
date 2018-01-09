@@ -88,7 +88,7 @@ set(config_module_list
 	drivers/navio_rgbled
 	drivers/pwm_out_sim
 	drivers/rpi_rc_in
-
+    drivers/yj901b
 	#
 	# Libraries
 	#
