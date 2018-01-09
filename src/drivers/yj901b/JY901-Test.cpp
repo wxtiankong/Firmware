@@ -17,7 +17,7 @@
  * This macro checks return value of the CUDA runtime call and exits
  * the application if the call failed.
  */
-#define CUDA_CHECK_RETURN(value) {											\
+/*#define CUDA_CHECK_RETURN(value) {											\
 	cudaError_t _m_cudaStat = value;										\
 	if (_m_cudaStat != cudaSuccess) {										\
 		fprintf(stderr, "Error %s at line %d in file %s\n",					\
@@ -31,14 +31,16 @@ __host__ __device__ unsigned int bitreverse(unsigned int number) {
 	number = ((0xaaaaaaaa & number) >> 1) | ((0x55555555 & number) << 1);
 	return number;
 }
-
+*/
 /**
  * CUDA kernel function that reverses the order of bits in each element of the array.
  */
+/*
 __global__ void bitreverse(void *data) {
 	unsigned int *idata = (unsigned int*) data;
 	idata[threadIdx.x] = bitreverse(idata[threadIdx.x]);
 }
+*/
 
 /**
  * Host function that prepares data array and passes it to the CUDA kernel.
